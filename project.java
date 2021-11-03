@@ -8,22 +8,74 @@ public class project {
         System.out.print("\nВведите сообщение для зашифровки: ");
         String inputText = scan.nextLine();
         char[] text = inputText.toCharArray();
-        System.out.print("Введите '\\rand', чтобы получить случайный ключ ИЛИ введите свой ключ для зашифровки.\nЭто может быть любая последовательность любых символов, длинной " + inputText.length() + ": ");
-        String key = scan.nextLine();
-        if (key.equals("\\rand")) {
-            char[] elementsOfKey = new char[inputText.length()];
-            int randomInt;
-            double randomDouble;
-            System.out.print("Ваш случайный ключ:");
-            for (int i = 0; i < inputText.length(); ++i) {
-                randomDouble = (Math.random());
-                randomInt = (int) (randomDouble*1000);
-                text[i] = (char) (((int) text[i]) + randomInt);
-                System.out.print( (char) (randomInt));
-                elementsOfKey[i] = (((char) (randomInt)));
+        int i = 0;
+        inputText = new String(text);
+        while (i != 1) {
+            System.out.print("Введите '\\rand', чтобы получить случайный ключ ИЛИ введите свой ключ для зашифровки.\nЭто может быть любая последовательность любых символов, длинной " + inputText.length() + ": ");
+            String key = scan.nextLine();
+            switch (key) {
+                case ("\\rand"):
+                    int randomInt;
+                    double randomDouble;
+                    System.out.print("\nВаш сгенерированный ключ: ");
+                    for (i = 0; i < inputText.length(); i = i) {
+                        randomDouble = (Math.random());
+                        randomInt = (int) (randomDouble * 1000);
+                        if ((randomInt > 31 & randomInt < 126) | (randomInt > 1039 & randomInt < 1104)) {
+                            System.out.print((char) (randomInt));
+                            int a = (((int) text[i]) + randomInt);
+                            if (((((int) text[i]) + randomInt) > 125) & ((((int) text[i]) + randomInt) < 1040)) {
+                                while (a > 125) {
+                                    a = 31 + a - 125;
+                                }
+                                text[i] = (char) (a);
+                                i++;
+                            } else if ((((int) text[i]) + randomInt) > 1103) {
+                                while (a > 1103) {
+                                    a = 1039 + a - 1104;
+                                }
+                                text[i] = (char) (a);
+                                i++;
+                            } else {
+                                text[i] = (char) (((int) text[i]) + randomInt);
+                                i++;
+                            }
+                        }
+                    }
+                    inputText = new String(text);
+                    System.out.println("\nВаш зашифрованный текст: " + inputText);
+                    i = 1;
+                    break;
+                default:
+                    if (key.length() == inputText.length()) {
+                        System.out.println("\nВаш ключ: " + key);
+                        char[] arrayOfKey = key.toCharArray();
+                        int a = (((int) text[i]) + ((int) arrayOfKey[i]));
+                        for (i = 0; i < inputText.length(); i++) {
+                            if ((((int) arrayOfKey[i]) > 31 & ((int) arrayOfKey[i]) < 126) | (((int) arrayOfKey[i]) > 1039 & ((int) arrayOfKey[i]) < 1104)) {
+                                if (((((int) text[i]) + ((int) arrayOfKey[i])) > 125) & ((((int) text[i]) + ((int) arrayOfKey[i])) < 1040)) {
+                                    while (a > 125) {
+                                        a = 31 + a - 126;
+                                    }
+                                    text[i] = (char) (a);
+                                } else if ((((int) text[i]) + ((int) arrayOfKey[i])) > 1103) {
+                                    while (a > 1103) {
+                                        a = 1039 + a - 1104;
+                                    }
+                                    text[i] = (char) (a);
+                                } else {
+                                    text[i] = (char) (a);
+                                }
+                            }
+                        }
+                        inputText = new String(text);
+                        System.out.println("Ваш зашифрованный текст: " + inputText);
+                        i = 1;
+                    } else {
+                        i = 0;
+                        System.out.println("\nОШИБКА! Введён ключ неверной длины! Повторите попытку...");
+                    }
             }
-            System.out.println("\n" + Arrays.toString(elementsOfKey));
-            System.out.println(text);
         }
         return null;
     }
@@ -42,17 +94,18 @@ public class project {
         Scanner scan = new Scanner(System.in);
         String freeInput;
         int i = 0;
-        while (i!=1) {
-        System.out.print("Здравствуйте! \n \nВыберите режим работы: \n 1) Зашифровка сообщения (\\enc) \n 2) Дешифровка сообщения (\\dec)\nВвод команды: ");
-        freeInput = scan.nextLine();
+        System.out.print("Здравствуйте! ");
+        while (i != 1) {
+            System.out.print("\n \nВыберите режим работы: \n 1) Зашифровка сообщения (\\enc) \n 2) Дешифровка сообщения (\\dec)\n 3) Выход из программы (\\exit)\nВвод команды: ");
+            freeInput = scan.nextLine();
             switch (freeInput) {
                 case ("\\enc") -> encryption();
-                case ("\\dec") -> decryption();
+                //case ("\\dec") -> decryption();
                 case ("\\exit") -> {
                     System.out.print("\nВыход...");
                     i = 1;
                 }
-                default -> System.out.print("\nОшибка! Попробуйте ввести команду ещё раз...\n\n");
+                default -> System.out.print("\n\nОшибка! Попробуйте ввести команду ещё раз...");
             }
         }
     }
